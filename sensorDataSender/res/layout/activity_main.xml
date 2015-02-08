@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <EditText
+        android:id="@+id/ip_addr"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:inputType="textShortMessage"
+        android:hint="@string/ip_addr"
+        />
+    
+	<Button
+	    android:layout_width="fill_parent"
+	    android:layout_height="204dp"
+	    android:onClick="startEvents"
+	    android:text="@string/start" />
+
+	<Button
+	    android:layout_width="fill_parent"
+	    android:layout_height="204dp"
+	    android:onClick="stopEvents"
+	    android:text="@string/stop" />
+	
+</LinearLayout>
