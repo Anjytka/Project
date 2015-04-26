@@ -25,11 +25,11 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         if WSHandler.user_type is None:
             WSHandler.user_type = msg['iAm']
             if WSHandler.user_type == 'reader':
-                self.write_message(msg)
+                #self.write_message(msg)
                 print "The connecting client is: %s" % WSHandler.user_type
 
             if WSHandler.user_type == 'viewer':
-                self.write_message(msg)
+                #self.write_message(msg)
                 print "The connecting client is: %s" % WSHandler.user_type
         else:
             msg_type = msg['sCh']

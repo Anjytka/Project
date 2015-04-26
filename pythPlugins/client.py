@@ -3,6 +3,7 @@ import thread
 import time
 import json
 
+f = open("text.txt", 'w')
 
 def on_message(ws, message):
     if message == 'whoIs':
@@ -10,7 +11,9 @@ def on_message(ws, message):
         ws.send(json.dumps({'iAm': 'reader'}))
     else:
         msg_data = json.loads(message)
-        print str(msg_data).strip('[]')
+        data = str(msg_data).strip('[]')
+        print data
+        f.write(data+"\n")
 
 def on_error(ws, error):
     print error
@@ -24,7 +27,7 @@ def on_open(ws):
     
 if __name__ == "__main__":
     websocket.enableTrace(True)
-    ws = websocket.WebSocketApp("ws://localhost:3000/ws",
+    ws = websocket.WebSocketApp("ws://178.62.197.146:3000/ws",
                               on_message = on_message,
                               on_error = on_error,
                               on_close = on_close)
