@@ -311,12 +311,16 @@ def calcVelocity(data):
 	vx = calcKalman(vx, 0)
 	vy = calcKalman(vy, 0)
 	vz = calcKalman(vz, 0)
-	fig = plt.figure(1)
-	ax = fig.gca(projection='3d')
-	ax.plot(vx, vy, vz, color="b")
-	ax.set_xlabel('X Label')
-	ax.set_ylabel('Y Label')
-	ax.set_zlabel('Z Label')
+	# fig = plt.figure(1)
+	# ax = fig.gca(projection='3d')
+	# ax.plot(vx, vy, vz, color="b")
+	# ax.set_xlabel('X Label')
+	# ax.set_ylabel('Y Label')
+	# ax.set_zlabel('Z Label')
+	plt.figure(4)
+	plt.plot(vx, 'b')
+	plt.plot(vy, 'r')
+	plt.plot(vz, 'g')
 
 	# ax.plot(coordsStart[0], coordsStart[1], coordsStart[2], color="r")
 
@@ -334,7 +338,7 @@ def calcCoords(dataA, dataV):
 		# x.append(x[i] + dataV[0][i+1]*dt + item[1]*pow(dt, 2)/2)
 		# y.append(y[i] + dataV[1][i+1]*dt + item[2]*pow(dt, 2)/2)
 		# z.append(z[i] + dataV[2][i+1]*dt + item[3]*pow(dt, 2)/2)
-		
+
 		x.append(x[i] + (dataV[0][i+1] + dataV[0][i])*dt/2)
 		y.append(y[i] + (dataV[1][i+1] + dataV[1][i])*dt/2)
 		z.append(z[i] + (dataV[2][i+1] + dataV[2][i])*dt/2)
@@ -343,12 +347,17 @@ def calcCoords(dataA, dataV):
 	y = calcKalman(y, 0)
 	z = calcKalman(z, 0)
 
-	fig = plt.figure(2)
-	ax = fig.gca(projection='3d')
-	ax.plot(x, y, z, color="b")
-	ax.set_xlabel('X Label')
-	ax.set_ylabel('Y Label')
-	ax.set_zlabel('Z Label')
+	plt.figure(5)
+	plt.plot(x, 'b')
+	plt.plot(y, 'r')
+	plt.plot(z, 'g')
+
+	# fig = plt.figure(2)
+	# ax = fig.gca(projection='3d')
+	# ax.plot(x, y, z, color="b")
+	# ax.set_xlabel('X Label')
+	# ax.set_ylabel('Y Label')
+	# ax.set_zlabel('Z Label')
 
 	print x[-1]
 	print y[-1]

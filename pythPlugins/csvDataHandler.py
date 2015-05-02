@@ -42,33 +42,34 @@ def  get_rot_indexes(arr):
 		i +=1
 	return res
 
-def convert_str_to_float_data(data, dataType = 0):	
+def convert_str_to_float_data(data, acc = 0):	
 	t = [row[1] for row in data[1:]]
 	x = [row[2] for row in data[1:]]
 	y = [row[3] for row in data[1:]]
 	z = [row[4] for row in data[1:]]
 
 	t = [float(i) for i in t]
-	x = [float(i)*gravity for i in x] if dataType else [float(i) for i in x]
-	y = [float(i)*gravity for i in y] if dataType else [float(i) for i in y]
-	z = [float(i)*gravity for i in z] if dataType else [float(i) for i in z]
+	x = [float(i)*gravity for i in x] if acc else [float(i) for i in x]
+	y = [float(i)*gravity for i in y] if acc else [float(i) for i in y]
+	z = [float(i)*gravity for i in z] if acc else [float(i) for i in z]
 	return (t, np.array([x, y, z]))
 
 def get_quaternions_from_euler(rotXYZ):
 	result = []
 	# rotXYZ = np.array(rotXYZ)
+	print rotXYZ[:,:][0]
 	for i in range(len(rotXYZ[0])):
-		q = tf.quaternion_from_euler(rotXYZ[:,i][1], rotXYZ[:,i][2], rotXYZ[:,i][0])
-		# qmatrix = tf.quaternion_matrix(q)
-		# result.append(qmatrix)
-		result.append(q)
+		q = tf.quaternion_from_euler(rotXYZ[:,i][1]*(180/np.pi), rotXYZ[:,i][2]*(180/np.pi), rotXYZ[:,i][0]*(180/np.pi))
+		qmatrix = tf.quaternion_matrix(q)
+		result.append(qmatrix)
+		# result.append(q)
 	return result
 
 # with open('streight4m_with_motion.csv', 'rb') as inputFile, open('output.csv', 'rwb') as outputFile:
 # Y-X20-50.csv
 # Left_tern_on_90_degrees.csv
 # streight4m_with_motion.csv
-with open('Data/Y-X20-50.csv', 'rb') as inputFile, open('Data/output.csv', 'rwb') as outputFile:
+with open('Data/Y-1000Fr-100.csv', 'rb') as inputFile, open('Data/output.csv', 'rwb') as outputFile:
 	reader = csv.reader(inputFile,  delimiter = ',')
 	writer = csv.writer(outputFile, delimiter = ',')
 	dataAcc = []
@@ -89,8 +90,10 @@ with open('Data/Y-X20-50.csv', 'rb') as inputFile, open('Data/output.csv', 'rwb'
 
 	(accT, accXYZ)= convert_str_to_float_data(dataAcc, 1)
 	(rotT, rotXYZ)= convert_str_to_float_data(dataRot, 0)
+	# print "!!!RES:",accXYZ[0].tolist()
 
-	accXYZ = np.vstack(([0. for i in range(len(accXYZ[0]-1))], accXYZ))
+
+	accXYZ = np.vstack((accXYZ, [0. for i in range(len(accXYZ[0]-1))]))
 
 	"""Get quaternion matrix for acceleration vectors"""
 	rotQuaternions = get_quaternions_from_euler(rotXYZ)
@@ -99,14 +102,21 @@ with open('Data/Y-X20-50.csv', 'rb') as inputFile, open('Data/output.csv', 'rwb'
 
 	"""Rotate acceleration"""
 	for i in range(len(rotQuaternions)):
-		accXYZ[:,i] = tf.quaternion_multiply(rotQuaternions[i], accXYZ[:,i])
+		# print accXYZ[:,i], "\n", np.array([accXYZ[:,i]]).T,"\n",rotQuaternions[i]
+		accXYZ[:,i] = np.array(rotQuaternions[i].dot(np.array(accXYZ[:,i]).T)).T
+		# print accXYZ[:,i]
 
+	# print "!!!RES:",accXYZ[0].tolist()
 	# print accXYZ
 
 	"""Kalman acceleration filtering"""
-	accXYZ[0] = calcKalman(accXYZ[0], 0)
-	accXYZ[1] = calcKalman(accXYZ[1], 1)
-	accXYZ[2] = calcKalman(accXYZ[2], 2)
+	# print accXYZ[0]
+	accXYZ[0] = calcKalman(accXYZ[0], 1)
+	accXYZ[1] = calcKalman(accXYZ[1], 2)
+	accXYZ[2] = calcKalman(accXYZ[2], 3)
+
+
+
 	# plt.show()
 
 	"""Example to check if movingAverage works correct

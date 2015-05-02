@@ -142,12 +142,25 @@ result = []
 positions = []
 speed = []
 x = matrix([[0.], [0.]]) # initial state (location and velocity)
-P = matrix([[1000., 0.], [0., 1000.]]) # initial uncertainty
+P = matrix([[100., 0.], [0., 100.]]) # initial uncertainty
 u = matrix([[0.], [0.]]) # external motion
 F = matrix([[1., 1.], [0, 1.]]) # next state function
 H = matrix([[1., 0.]]) # measurement function
 R = matrix([[4.]]) # measurement uncertainty
 I = matrix([[1., 0.], [0., 1.]]) # identity matrix
+
+def reset():
+    global positions, speed, result, x, P, u, F, H, R, I
+    positions = []
+    result = []
+    speed = []
+    x = matrix([[0.], [0.]]) # initial state (location and velocity)
+    P = matrix([[100., 0.], [0., 100.]]) # initial uncertainty
+    u = matrix([[0.], [0.]]) # external motion
+    F = matrix([[1., 1.], [0, 1.]]) # next state function
+    H = matrix([[1., 0.]]) # measurement function
+    R = matrix([[4.]]) # measurement uncertainty
+    I = matrix([[1., 0.], [0., 1.]]) # identity matrix
 
 def kalman(x, P):
     global positions, speed, result, u, F, H, R, I
@@ -188,27 +201,18 @@ def calcKalman(acc, iter):
     kalman(x, P)
 
     # print speed
-
-    # plt.figure(iter)
-    # plt.plot(data, 'b')
-    # plt.plot(positions, 'r')
-    # plt.plot(result, 'g')
-    # plt.plot(speed, 'y')
+    if (iter > 0):
+        plt.figure(iter)
+        plt.plot(data, 'b')
+        plt.plot(positions, 'r')
+        plt.plot(result, 'g')
+        plt.plot(speed, 'y')
 
     return result
 
 
-def reset():
-    global positions, speed, result, x, P, u, F, H, R, I
-    result = []
-    speed = []
-    x = matrix([[0.], [0.]]) # initial state (location and velocity)
-    P = matrix([[1000., 0.], [0., 1000.]]) # initial uncertainty
-    u = matrix([[0.], [0.]]) # external motion
-    F = matrix([[1., 1.], [0, 1.]]) # next state function
-    H = matrix([[1., 0.]]) # measurement function
-    R = matrix([[4.]]) # measurement uncertainty
-    I = matrix([[1., 0.], [0., 1.]]) # identity matrix
+
+    
 
 
 
