@@ -182,18 +182,18 @@ def calcKalman(acc, iter):
 
     # positions = [i + random() * randint(-1, 1) * 5 for i in data]
     positions = acc
-    print positions
+    # print positions
 
     
     kalman(x, P)
 
-    print speed
+    # print speed
 
-    plt.figure(iter)
-    plt.plot(data, 'b')
-    plt.plot(positions, 'r')
-    plt.plot(result, 'g')
-    plt.plot(speed, 'y')
+    # plt.figure(iter)
+    # plt.plot(data, 'b')
+    # plt.plot(positions, 'r')
+    # plt.plot(result, 'g')
+    # plt.plot(speed, 'y')
 
     return result
 

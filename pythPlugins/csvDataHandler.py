@@ -2,6 +2,7 @@
 import csv
 import numpy as np
 import matplotlib as plt
+from mpl_toolkits.mplot3d import Axes3D
 from tabulate import tabulate
 from movingAverage import *
 from kalmanMatrix import *
@@ -51,17 +52,22 @@ def convert_str_to_float_data(data, dataType = 0):
 	x = [float(i)*gravity for i in x] if dataType else [float(i) for i in x]
 	y = [float(i)*gravity for i in y] if dataType else [float(i) for i in y]
 	z = [float(i)*gravity for i in z] if dataType else [float(i) for i in z]
-	return (t, [x, y, z])
+	return (t, np.array([x, y, z]))
 
 def get_quaternions_from_euler(rotXYZ):
 	result = []
-	rotXYZ = np.array(rotXYZ)
+	# rotXYZ = np.array(rotXYZ)
 	for i in range(len(rotXYZ[0])):
-		quaternion = tf.quaternion_from_euler(rotXYZ[:,i][1], rotXYZ[:,i][2], rotXYZ[:,i][0])
-		result.append(quaternion)
+		q = tf.quaternion_from_euler(rotXYZ[:,i][1], rotXYZ[:,i][2], rotXYZ[:,i][0])
+		# qmatrix = tf.quaternion_matrix(q)
+		# result.append(qmatrix)
+		result.append(q)
 	return result
 
 # with open('streight4m_with_motion.csv', 'rb') as inputFile, open('output.csv', 'rwb') as outputFile:
+# Y-X20-50.csv
+# Left_tern_on_90_degrees.csv
+# streight4m_with_motion.csv
 with open('Data/Y-X20-50.csv', 'rb') as inputFile, open('Data/output.csv', 'rwb') as outputFile:
 	reader = csv.reader(inputFile,  delimiter = ',')
 	writer = csv.writer(outputFile, delimiter = ',')
@@ -81,20 +87,27 @@ with open('Data/Y-X20-50.csv', 'rb') as inputFile, open('Data/output.csv', 'rwb'
 	# print tabulate(dataAcc[1:], headers=dataAcc[0],floatfmt=".16f")
 	# print tabulate(dataRot[1:], headers=dataRot[0],floatfmt=".16f")
 
-	(accT, [accX, accY, accZ])= convert_str_to_float_data(dataAcc, 1)
+	(accT, accXYZ)= convert_str_to_float_data(dataAcc, 1)
 	(rotT, rotXYZ)= convert_str_to_float_data(dataRot, 0)
 
-	"""Kalman acceleration filtering"""
-	accX = calcKalman(accX, 1)
-	accY = calcKalman(accY, 2)
-	accZ = calcKalman(accZ, 3)
-	# plt.show()
-	
+	accXYZ = np.vstack(([0. for i in range(len(accXYZ[0]-1))], accXYZ))
 
-	"""Rotate acceleration vectors"""
+	"""Get quaternion matrix for acceleration vectors"""
 	rotQuaternions = get_quaternions_from_euler(rotXYZ)
-	print "Quaternions"
-	print rotQuaternions
+	# for item in rotQuaternions:
+	# 	print item
+
+	"""Rotate acceleration"""
+	for i in range(len(rotQuaternions)):
+		accXYZ[:,i] = tf.quaternion_multiply(rotQuaternions[i], accXYZ[:,i])
+
+	# print accXYZ
+
+	"""Kalman acceleration filtering"""
+	accXYZ[0] = calcKalman(accXYZ[0], 0)
+	accXYZ[1] = calcKalman(accXYZ[1], 1)
+	accXYZ[2] = calcKalman(accXYZ[2], 2)
+	# plt.show()
 
 	"""Example to check if movingAverage works correct
 		count = 3 
@@ -117,13 +130,26 @@ with open('Data/Y-X20-50.csv', 'rb') as inputFile, open('Data/output.csv', 'rwb'
 	
 	"""Prepare data for coordinate counting"""
 	dataAccNew = []
-	for i in range(len(accX)):
-		dataAccNew.append([accT[i], accX[i], accY[i], accZ[i]])
+	for i in range(len(accXYZ[0])):
+		dataAccNew.append([accT[i], accXYZ[0][i], accXYZ[1][i], accXYZ[2][i]])
 	# tab =  tabulate(dataAccNew,headers=['t','Ax','Ay','Az'],floatfmt=".16f")
 	# print tab
-	
-	countCoodr(dataAccNew)
 
+	velocity = calcVelocity(dataAccNew)
+
+	coords = calcCoords(dataAccNew, velocity)
+	plt.show()
+	# coords = countCoodr(dataAccNew)
+	# coordsStart = coords
+	# coords[0] = calcKalman(coords[0], 3)
+	# coords[1] = calcKalman(coords[1], 4)
+	# coords[2] = calcKalman(coords[2], 5)
+
+	# fig = plt.figure(1)
+	# ax = fig.gca(projection='3d')
+	# ax.plot(coords[0], coords[1], coords[2], color="b")
+	# ax.plot(coordsStart[0], coordsStart[1], coordsStart[2], color="r")
+	# plt.show()
 
 
 
