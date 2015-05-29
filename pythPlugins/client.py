@@ -2,13 +2,14 @@ import websocket
 import thread
 import time
 import json
+import datatime
 
-f = open("text.txt", 'w')
+f = None
 
 def on_message(ws, message):
     if message == 'whoIs':
-        response = {'iAm': "reader"}
-        ws.send(json.dumps({'iAm': 'reader'}))
+        response = {'iAm': "recipient"}
+        ws.send(json.dumps({'iAm': 'recipient'}))
     else:
         msg_data = json.loads(message)
         data = str(msg_data).strip('[]')
@@ -24,6 +25,10 @@ def on_close(ws):
 
 def on_open(ws):
     print "### open ###"
+    time = datetime.datetime.now()
+    f = open(strftime("%Y-%m-%d_%H-%M-%S", time)+'.csv', 'w')
+    f.write("time,accx,accY,accZ,gyrX,gyrY,gyrZ\n")
+
     
 if __name__ == "__main__":
     websocket.enableTrace(True)

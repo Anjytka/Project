@@ -1,8 +1,7 @@
+# -*- coding: utf-8 -*-
 from math import *
 from random import *
 import matplotlib.pyplot as plt
-import pdb
-
 
 class matrix:
 
@@ -142,7 +141,7 @@ result = []
 positions = []
 speed = []
 x = matrix([[0.], [0.]]) # initial state (location and velocity)
-P = matrix([[100., 0.], [0., 100.]]) # initial uncertainty
+P = matrix([[1000., 0.], [0., 1000.]]) # initial uncertainty
 u = matrix([[0.], [0.]]) # external motion
 F = matrix([[1., 1.], [0, 1.]]) # next state function
 H = matrix([[1., 0.]]) # measurement function
@@ -155,7 +154,7 @@ def reset():
     result = []
     speed = []
     x = matrix([[0.], [0.]]) # initial state (location and velocity)
-    P = matrix([[100., 0.], [0., 100.]]) # initial uncertainty
+    P = matrix([[10., 0.], [0., 10.]]) # initial uncertainty
     u = matrix([[0.], [0.]]) # external motion
     F = matrix([[1., 1.], [0, 1.]]) # next state function
     H = matrix([[1., 0.]]) # measurement function
@@ -168,11 +167,11 @@ def kalman(x, P):
 
         # measurement update
         z = matrix([[positions[n]]])
-        y = z - H * x
-        S = H * P * H.transpose() + R
-        K = P * H.transpose() * S.inverse()
-        x = x + (K * y)
-        P = (I - K * H) * P
+        y = z - H * x # Отклонение полученного на шаге k наблюдения от наблюдения, ожидаемого при произведенной экстраполяции 
+        S = H * P * H.transpose() + R # Ковариационная матрица вектора отклонения
+        K = P * H.transpose() * S.inverse() # Оптимальная по Калману матрица коэффициентов усиления
+        x = x + (K * y) # Коррекция ранее полученной экстраполяции вектора состояния
+        P = (I - K * H) * P # Расчет ковариационной матрицы оценки вектора состояния системы
 
         # prediction
         x = F * x + u
@@ -181,7 +180,6 @@ def kalman(x, P):
         result.append(x.value[0][0])
         speed.append(x.value[1][0])
         # print x
-
 ########################################
 
 def calcKalman(acc, iter):

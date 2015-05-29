@@ -176,7 +176,7 @@ public class MainActivity extends Activity implements IOCallback, SensorEventLis
     public void on(String event, IOAcknowledge ack, Object... args) {
         System.out.println("Server triggered event '" + event + "'");
     	if (event.equals("whoIs")) {
-    		websocket.sendTextMessage("{\"iAm\": \"viewer\"}" );
+    		websocket.sendTextMessage("{\"iAm\": \"sender\"}" );
     	}
     }
     

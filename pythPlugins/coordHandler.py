@@ -296,8 +296,10 @@ def calcVelocity(data):
 	vx = [0]
 	vy = [0]
 	vz = [0]
+	sdT = 0
 	for (i, item) in enumerate(data[1:]):
 		dt = item[0] - tPr
+		sdT += dt
 		# vx.append(vx[i] + item[1]*dt)
 		# vy.append(vy[i] + item[2]*dt)
 		# vz.append(vz[i] + item[3]*dt)
@@ -311,6 +313,7 @@ def calcVelocity(data):
 	vx = calcKalman(vx, 0)
 	vy = calcKalman(vy, 0)
 	vz = calcKalman(vz, 0)
+	print "Average delta time = ", sdT/len(data[2:])
 	# fig = plt.figure(1)
 	# ax = fig.gca(projection='3d')
 	# ax.plot(vx, vy, vz, color="b")
@@ -326,8 +329,6 @@ def calcVelocity(data):
 
 	return [vx, vy, vz]
 
-
-
 def calcCoords(dataA, dataV):
 	tPr = dataA[0][0]
 	x = [0]
@@ -339,9 +340,9 @@ def calcCoords(dataA, dataV):
 		# y.append(y[i] + dataV[1][i+1]*dt + item[2]*pow(dt, 2)/2)
 		# z.append(z[i] + dataV[2][i+1]*dt + item[3]*pow(dt, 2)/2)
 
-		x.append(x[i] + (dataV[0][i+1] + dataV[0][i])*dt/2)
-		y.append(y[i] + (dataV[1][i+1] + dataV[1][i])*dt/2)
-		z.append(z[i] + (dataV[2][i+1] + dataV[2][i])*dt/2)
+		x.append(x[i] + (dataV[0][i])*dt)
+		y.append(y[i] + (dataV[1][i])*dt)
+		z.append(z[i] + (dataV[2][i])*dt)
 		tPr = item[0]
 	x = calcKalman(x, 0)
 	y = calcKalman(y, 0)
