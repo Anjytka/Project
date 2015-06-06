@@ -13,11 +13,24 @@ def movingAverage(data, m):
 	for i in range(length - m + 1, length):
 		prev = aver[-1]
 		prev_w = aver[-m]
-		aver.append(prev-(prev_w+data[i])/m)
+		k = length - i
+		aver.append(reduce(lambda x, y: x + y, data[i:i+k]) / k)
+		# aver.append(prev-(prev_w+data[i])/m)
 		# print i+1, " : ", aver[-1]
 	# for i in range(len(data)-1):
 	# 	aver.append(data[i])
 		# yield aver
+	return aver
+
+
+def movingExpAverage(data, m):
+	length = len(data)
+	if (m > length):
+		raise Exception("Interval have to be less then data length")
+	aver = [data[0]]
+	alpha = float(2)/(m+1)
+	for i in range(1,length):
+		aver.append(data[i]*alpha + (1-alpha)*aver[-1])
 	return aver
 
 

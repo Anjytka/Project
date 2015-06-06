@@ -7,6 +7,13 @@
     <string name="start">Старт</string>
     <string name="stop">Стоп</string>
     <string name="error">Ошибка</string>
-    <string name="ip_addr">Введите ip компьютера</string>
+    <string name="ip_addr">IP-адрес</string>
+    <string name="exit">Выход</string>
+    <string name="X">x = </string>
+    <string name="Y">y = </string>
+    <string name="Z">z = </string>
+    <string name="port">порт</string>
+    <string name="colon">:</string>
+    <string name="Hz">Гц</string>
 
 </resources>

@@ -1,8 +1,7 @@
 import websocket
-import thread
 import time
 import json
-import datatime
+import datetime
 
 f = None
 
@@ -27,7 +26,7 @@ def on_open(ws):
     print "### open ###"
     time = datetime.datetime.now()
     f = open(strftime("%Y-%m-%d_%H-%M-%S", time)+'.csv', 'w')
-    f.write("time,accx,accY,accZ,gyrX,gyrY,gyrZ\n")
+    f.write("timeA,accx,accY,accZ,timeG,gyrX,gyrY,gyrZ\n")
 
     
 if __name__ == "__main__":

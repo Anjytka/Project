@@ -154,7 +154,7 @@ def reset():
     result = []
     speed = []
     x = matrix([[0.], [0.]]) # initial state (location and velocity)
-    P = matrix([[10., 0.], [0., 10.]]) # initial uncertainty
+    P = matrix([[1000., 0.], [0., 1000.]]) # initial uncertainty
     u = matrix([[0.], [0.]]) # external motion
     F = matrix([[1., 1.], [0, 1.]]) # next state function
     H = matrix([[1., 0.]]) # measurement function
