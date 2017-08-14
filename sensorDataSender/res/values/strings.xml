@@ -6,13 +6,13 @@
     <string name="hello_world">Hello world!</string>
     <string name="start">Старт</string>
     <string name="stop">Стоп</string>
-    <string name="error">Ошибка</string>
-    <string name="ip_addr">IP-адрес</string>
+    <string name="attention">Внимание!</string>
+    <string name="ip_addr">255.255.255.255</string>
     <string name="exit">Выход</string>
     <string name="X">x = </string>
     <string name="Y">y = </string>
     <string name="Z">z = </string>
-    <string name="port">порт</string>
+    <string name="port">1024-65535</string>
     <string name="colon">:</string>
     <string name="Hz">Гц</string>
 

@@ -6,6 +6,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from tabulate import tabulate
 from movingAverage import *
 from kalmanM import *
+import kalmanM_without_err as kwoe
 from coordHandler import *
 import transformations as tf
 # import coordHandler as cdHlr
@@ -97,20 +98,20 @@ def get_quaternions_from_euler(rotXYZ):
 		q = tf.quaternion_from_euler(rotXYZ[:,i][0], rotXYZ[:,i][1], rotXYZ[:,i][2])
 		qmatrix = tf.quaternion_matrix(q)
 		if i == 0:
-			print "Q: ", q, "\n", qmatrix
+			print("Q: ", q, "\n", qmatrix)
 		result.append(qmatrix[0:3,0:3])
 		# result.append(q)
 	return result
 
 def get_quar_matrix_from_quat(qtXYZ):
 	result = []
+	print(len(qtXYZ[0]))
 	# rotXYZ = np.array(rotXYZ)
 	for i in range(len(qtXYZ[0])):
-
 		qmatrix = get_quaternion_matrix(qtXYZ[:,i])
 		result.append(qmatrix[0:3,0:3])
 		if i == 0:
-			print "QW: ", qtXYZ[:,i]
+			print("QW: ", qtXYZ[:,i])
 			# print "QM: ", qmatrix[0:3,0:3]
 		# result.append(q)
 	return result
@@ -175,9 +176,8 @@ def get_quaternion_matrix(quaternion):
 # Do_Nothing_1minFr-100.csv
 # Y-DownStairsFr-100.csv
 # Y-DownStairsWOturnFr-100.csv
-with open('Data/Y-DownStairsWOturnFr-100.csv', 'rb') as inputFile, open('Data/output.csv', 'rwb') as outputFile:
+with open('Data/Y-400Fr-100InHand.csv', 'rb') as inputFile:
 	reader = csv.reader(inputFile,  delimiter = ',')
-	writer = csv.writer(outputFile, delimiter = ',')
 	dataAcc = []
 	dataRot = []
 	dataQuat = []
@@ -282,6 +282,17 @@ with open('Data/Y-DownStairsWOturnFr-100.csv', 'rb') as inputFile, open('Data/ou
 		speed_Kalm.append(res[1])
 		# p_Kalm.append(res[2])
 
+	"""Kalman woe"""
+	coord_Kalm_woe = []
+	for i in range(len(accXYZ)):
+		res = kwoe.calc_kalman(accXYZ[i], accT)
+		coord_Kalm_woe.append(res[0])
+
+	"""Kalman woe vs Exponential Moving Average """
+	coord_Kalm_woe_ema = []
+	count = 100
+	for i in range(len(coord_Kalm)):
+		coord_Kalm_woe_ema.append(movingExpAverage(movingExpAverage(coord_Kalm_woe[i],count), count))
 
 	"""Kalman vs Moving Average"""
 	coord_Kalm_ma = []
@@ -328,6 +339,19 @@ with open('Data/Y-DownStairsWOturnFr-100.csv', 'rb') as inputFile, open('Data/ou
 	# ax.set_xlim3d(0, 20)
 	# ax.set_ylim3d(0, 20)
 	# plt.show()
+
+	fig = plt.figure(2)
+	ax = fig.gca(projection='3d')
+	ax.plot(coord_Kalm_woe[0], coord_Kalm_woe[1], coord_Kalm_woe[2], color="b")
+	# ax.plot(coord_Kalm_ma[0], coord_Kalm_ma[1], coord_Kalm_ma[2], color="r")
+	# ax.plot(coord_Kalm_ma_ma[0], coord_Kalm_ma_ma[1], coord_Kalm_ma_ma[2], color="g")
+	ax.plot(coord_Kalm_woe_ema[0], coord_Kalm_woe_ema[1], coord_Kalm_woe_ema[2], color="r")
+	ax.plot([coord_Kalm_woe[0][-1]], [coord_Kalm_woe[1][-1]], [coord_Kalm_woe[2][-1]], 'ro')
+	# ax.set_xlim(-2, 2)
+	# ax.plot(coord_Kalm[0][::50], coord_Kalm[1][::50], coord_Kalm[2][::50], color="b")
+	ax.set_xlabel('X')
+	ax.set_ylabel('Y')
+	ax.set_zlabel('Z')
 
 
 	# ax.plot(coord_Kalm_ma[0], coord_Kalm_ma[1], coord_Kalm_ma[2], color="r")
@@ -391,23 +415,31 @@ with open('Data/Y-DownStairsWOturnFr-100.csv', 'rb') as inputFile, open('Data/ou
 	plt.title('Exponentially weighted moving average filter')
 	plt.xlabel('Count, unit')
 	plt.ylabel('Acceleration Ox, m/s^2')
-	plt.plot(accXYZ[0][200:600], 'k', lw=0.5)
+	plt.plot(accXYZ[0], 'k', lw=0.5)
 	for i in range(len(acc_ma_x)):
-		plt.plot(acc_ema_x[i][200:600], color[i])
+		plt.plot(acc_ema_x[i], color[i])
 	# plt.plot(acc_ema_x[0][400:600], color[0])
 	# plt.plot(acc_ma_x[0][400:600], color[2])
 
 
-	# plt.figure(10)
+	plt.figure(11)
 	# plt.title('Moving average vs real data')
 	# plt.xlabel('Count, unit')
 	# plt.ylabel('Acceleration Ox, m/s^2')
-	# plt.plot(accXYZ[0][200:600], 'k', lw=0.5)
-	# for i in range(len(acc_ma_x)):
-	# 	plt.plot(acc_ma_x[i][200:600], color[i])
+	plt.plot(accXYZ[0], 'k', lw=0.5)
+	for i in range(len(acc_ma_x)):
+		plt.plot(acc_ma_x[i], color[i])
+
+
+	plt.figure(12)
+	plt.plot(accXYZ[0][::2], 'k', lw=0.5)
+	plt.plot(acc_ema_x[2][::2], color[0])
+	plt.plot(acc_ma_x[2][::2], color[2])
+	print("EMA vs MA")
+	print(acc_ema_x[2][0], ":", acc_ma_x[2][0], " diff ", acc_ema_x[2][0] -  acc_ma_x[2][0])
+	print(acc_ema_x[2][-1], ":", acc_ma_x[2][-1], " diff ",  acc_ma_x[2][-1] -  acc_ema_x[2][-1])
 	
-	
-	plt.figure(11)
+	plt.figure(13)
 	plt.title('Moving average for Ox coord with different windows')
 	plt.xlabel('Count, unit')
 	plt.ylabel('Distance Ox, m')
@@ -418,14 +450,14 @@ with open('Data/Y-DownStairsWOturnFr-100.csv', 'rb') as inputFile, open('Data/ou
 	for i in range(len(acc_ema_x)):
 		coord_ema_x.append(calcCoord(acc_ema_x[i],accT))
 
-	plt.figure(12)
+	plt.figure(14)
 	plt.title('Exponentially moving average for Ox coord with different windows')
 	plt.xlabel('Count, unit')
 	plt.ylabel('Distance Ox, m')
 	for i in range(len(coord_ema_x)):
 		plt.plot(coord_ema_x[i], color[i])
 
-	fig = plt.figure(13)
+	fig = plt.figure(15)
 	ax1 = fig.gca(projection='3d')
 	# ax1.plot(coord_ema[0][:1000], coord_ema[1][:1000], coord_ema[2][:1000], color="b")
 	ax1.plot(coord_wo[0], coord_wo[1], coord_wo[2], color="g")

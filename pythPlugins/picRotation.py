@@ -85,16 +85,45 @@
 
 import numpy as np
 import math
-q = np.array([1, 2, 3], dtype=np.float64, copy=True)
-print q
-n = np.dot(q, q)
-print n
-q *= math.sqrt(2.0 / n)
-print q
-q = np.outer(q, q)
-print q
-print range(5, 7)
-a = [6, 7, 8, 4, 5]
-print "a=", a[1:]
+from time import gmtime, strftime
+# import datetime
+
+# q = np.array([1, 2, 3], dtype=np.float64, copy=True)
+# print q
+# n = np.dot(q, q)
+# print n
+# q *= math.sqrt(2.0 / n)
+# print q
+# q = np.outer(q, q)
+# print q
+# print range(5, 7)
+# a = [6, 7, 8, 4, 5]
+# print "a=", a[1:]
+print strftime("%Y-%m-%d %H:%M:%S.%s", gmtime())
+# time = datetime.datetime.now()
+# print time
+
+# f = open(strftime("%Y-%m-%d %H:%M:%S.%s", gmtime())+'.csv', 'w')
+# f.write("timeA,accx,accY,accZ,timeG,gyrX,gyrY,gyrZ\n")
+data = []
+data.append([1])
+data.append([2])
+data.append([3])
+
+data2 = []
+data2.append([4])
+data2.append([5])
+
+if (len(data) > len(data2)) and \
+   True:
+		data = data[:len(data2)]
+		print data
+data = np.\
+	array(data)
+print np.vstack((data))
+print data[0,:]
+
+
+
 
 

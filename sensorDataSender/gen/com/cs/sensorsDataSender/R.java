@@ -28,18 +28,21 @@ public final class R {
     }
     public static final class id {
         public static final int acc=0x7f090000;
-        public static final int action_settings=0x7f09000c;
+        public static final int action_settings=0x7f09000f;
         public static final int ax=0x7f090001;
         public static final int ay=0x7f090002;
         public static final int az=0x7f090003;
-        public static final int exit=0x7f09000b;
+        public static final int exit=0x7f09000e;
+        public static final int freq_ch=0x7f090008;
+        public static final int freq_val=0x7f090009;
         public static final int gx=0x7f090005;
         public static final int gy=0x7f090006;
         public static final int gyro=0x7f090004;
         public static final int gz=0x7f090007;
-        public static final int ip_addr=0x7f090009;
-        public static final int port=0x7f09000a;
-        public static final int seekBar1=0x7f090008;
+        public static final int ip_addr=0x7f09000a;
+        public static final int port=0x7f09000b;
+        public static final int start=0x7f09000c;
+        public static final int stop=0x7f09000d;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -60,8 +63,8 @@ public final class R {
         public static final int Z=0x7f06000a;
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
+        public static final int attention=0x7f060005;
         public static final int colon=0x7f06000c;
-        public static final int error=0x7f060005;
         public static final int exit=0x7f060007;
         public static final int hello_world=0x7f060002;
         public static final int ip_addr=0x7f060006;

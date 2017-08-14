@@ -77,7 +77,7 @@ def getCoords(vals):
 
 	return data
 
-f = open("text.txt", 'r')
+f = open("Data/text2.txt", 'r')
 f2 = open("res.txt", "w")
 lines = f.readlines()
 for line in lines:

@@ -50,7 +50,7 @@
 	            android:layout_height="wrap_content"
 	            android:paddingTop="10dp"
 	            android:gravity="right"
-	            android:text="0.121841430"
+	            android:text="0.0"
 	            android:textColor="#FF0000"
 	            android:textSize="16sp" />
 
@@ -68,7 +68,7 @@
 	            android:layout_height="wrap_content"
 	            android:paddingTop="10dp"
 	            android:gravity="right"
-	            android:text="-0.448944091"
+	            android:text="0.0"
 	            android:textColor="#04B404"
 	            android:textSize="16sp" />
 	        
@@ -86,7 +86,7 @@
 	            android:layout_height="wrap_content"
 	            android:paddingTop="10dp"
 	            android:gravity="right"
-	            android:text="-0.448944091"
+	            android:text="0.0"
 	            android:textColor="#0000FF"
 	            android:textSize="16sp" />
 	
@@ -120,7 +120,7 @@
 			    android:layout_height="wrap_content"
 			    android:paddingTop="10dp"
 			    android:gravity="right"
-			    android:text="-0.286923383"
+			    android:text="0.0"
 			    android:textColor="#FF0000"
 			    android:textSize="16sp" />
 
@@ -138,7 +138,7 @@
 			    android:layout_height="wrap_content"
 			    android:paddingTop="10dp"
 			    android:gravity="right"
-			    android:text="0.029231122"
+			    android:text="0.0"
 			    android:textColor="#04B404"
 			    android:textSize="16sp" />
 
@@ -156,7 +156,7 @@
 			    android:layout_height="wrap_content"
 			    android:paddingTop="10dp"
 			    android:gravity="right"
-			    android:text="-0.049012550"
+			    android:text="0.0"
 			    android:textColor="#0000FF"
 			    android:textSize="16sp" />
 	
@@ -182,31 +182,34 @@
             android:weightSum="18" >
 
             <SeekBar
-                android:id="@+id/seekBar1"
+                android:id="@+id/freq_ch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="0dp"
-                android:layout_weight="16" />
+                android:layout_weight="16"
+                android:max="3"
+                android:progress="3"/>
 			
 			<TextView
+			    android:id="@+id/freq_val"
 			    android:layout_width="wrap_content"
 			    android:layout_height="45dp"
 			    android:layout_margin="0dp"
 			    android:layout_weight="1"
 			    android:gravity="center"
 			    android:maxLines="1"
-			    android:text="50"
+			    android:text="100"
 			    android:textSize="20sp" />
 
 			<TextView
-				    android:layout_width="wrap_content"
-				    android:layout_height="45dp"
-				    android:layout_weight="1"
-				    android:text="@string/Hz"
-				    android:gravity="center"
-				    android:textSize="20sp"
-				    android:maxLines="1"/>
+			    android:layout_width="wrap_content"
+			    android:layout_height="45dp"
+			    android:layout_weight="1"
+			    android:text="@string/Hz"
+			    android:gravity="center"
+			    android:textSize="20sp"
+			    android:maxLines="1"/>
 			
         </LinearLayout>
         
@@ -221,24 +224,24 @@
 			    android:id="@+id/ip_addr"
 			    android:layout_width="wrap_content"
 			    android:layout_height="45dp"
-			    android:layout_weight="3"
+			    android:layout_weight="2.97"
 			    android:hint="@string/ip_addr"
-			    android:inputType="textShortMessage" />
+			    android:inputType="number|phone" />
 			
 			<TextView
-				    android:layout_width="wrap_content"
-				    android:layout_height="45dp"
-				    android:text="@string/colon"
-				    android:gravity="center"
-				    android:textSize="20sp"/>
+			    android:layout_width="wrap_content"
+			    android:layout_height="45dp"
+			    android:text="@string/colon"
+			    android:gravity="center"
+			    android:textSize="20sp"/>
 			 
 	        <EditText
 	            android:id="@+id/port"
 	            android:layout_width="wrap_content"
 	            android:layout_height="45dp"
-			    android:layout_weight="1"
+	            android:layout_weight="0.96"
 	            android:hint="@string/port"
-	            android:inputType="textShortMessage" />
+	            android:inputType="number" />
 
         </LinearLayout>
     
@@ -251,24 +254,29 @@
 		    android:weightSum="3" >
 		
 				<Button
+				    android:id="@+id/start"
 				    android:layout_width="fill_parent"
 				    android:layout_height="wrap_content"
 				    android:layout_weight="1"
 				    android:onClick="startEvents"
-				    android:text="@string/start" />
+				    android:text="@string/start"/>
 			
 				<Button
+				    android:id="@+id/stop"
 				    android:layout_width="fill_parent"
 				    android:layout_height="wrap_content"
-				     android:layout_weight="1"
+				    android:layout_weight="1"
 				    android:onClick="stopEvents"
-				    android:text="@string/stop" />
+				    android:text="@string/stop"
+				    android:enabled="false"
+				    />
 			
 				<Button
 				    android:id="@+id/exit"
 				    android:layout_width="fill_parent"
 				    android:layout_height="wrap_content"
-				     android:layout_weight="1"
+				    android:layout_weight="1"
+				    android:onClick="exit"
 				    android:text="@string/exit" />
 		</LinearLayout>
     </LinearLayout>

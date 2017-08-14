@@ -14,8 +14,8 @@ def movingAverage(data, m):
 		prev = aver[-1]
 		prev_w = aver[-m]
 		k = length - i
-		aver.append(reduce(lambda x, y: x + y, data[i:i+k]) / k)
-		# aver.append(prev-(prev_w+data[i])/m)
+		# aver.append(reduce(lambda x, y: x + y, data[i:i+k]) / k)
+		aver.append(prev-(prev_w+data[i])/m)
 		# print i+1, " : ", aver[-1]
 	# for i in range(len(data)-1):
 	# 	aver.append(data[i])
